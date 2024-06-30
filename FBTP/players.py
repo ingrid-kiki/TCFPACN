@@ -1,21 +1,25 @@
 # coding=utf-8
 
 
-class Player:
+class Player: # Represents a football player.
 
     def __init__(self, key):
         self.id = key  # player's ID
-        self.connectedTo = {}  # the connection to other players --> {players' id: similarity}
-        self.abilities = {}  # player's ability --> {ability ID: value}
-        self.position = None  # position
-        self.salary = 0  # players' salary
+        # Dictionary that stores the players he is connected to
+        # and the strength of this connection (similarity).
+        self.connectedTo = {}
+        # Dictionary that stores player skills (skill ID: value).
+        self.abilities = {}
+        self.position = None  # Player position on the field.
+        self.salary = 0  # players' salary.
 
-    def add_neighbor(self, nbr, weight=0):
+    def add_neighbor(self, nbr, weight=0): # Adds a neighbor (another player) to the connections list.
         self.connectedTo[nbr] = weight
 
     def __str__(self):
         return str(self.id) + ' connectedTo : ' + str([x.id for x in self.connectedTo])
 
+    # Methods for accessing player attributes.
     def get_connection(self):  # get the neighbors
         return self.connectedTo.keys()
 
@@ -33,16 +37,16 @@ class Player:
 
     def get_weight(self, nbr):  # get the weight of a neighbor
         return self.connectedTo[nbr]
-
-
+	
 class Goalkeeper:
 
     def __init__(self, g_id):
-        self.id = g_id
-        self.ability = []
-        self.rating = 0
-        self.salary = 0
+        self.id = g_id # Unique goalkeeper identifier.
+        self.ability = [] # List of goalkeeper skills (probably specific to goalkeepers).
+        self.rating = 0 # Overall goalkeeper rating.
+        self.salary = 0 # Goalkeeper salary.
 
+    #  Methods for accessing goalkeeper attributes.
     def get_id(self):
         return self.id
 
@@ -55,18 +59,18 @@ class Goalkeeper:
     def get_salary(self):
         return self.salary
 
-
 class CutPlayer:
     """
     The player to be pruning
     """
 
     def __init__(self, key):
-        self.id = key
-        self.cut_pos = None  # Forward/Midfielder or Backward
-        self.cut_position = ""  # position
-        self.cut_salary = 0  # salary
+        self.id = key # Unique player identifier.
+        self.cut_pos = None  # Indicates whether the player is attacking/midfield or defending
+        self.cut_position = ""  # Specific position of the player to be removed.
+        self.cut_salary = 0  # Player's salary to be removed.
 
+    # Methods for accessing the attributes of the player to be removed.
     def get_id(self):
         return self.id
 
@@ -79,20 +83,19 @@ class CutPlayer:
     def get_cut_salary(self):
         return self.cut_salary
 
-
 class Graph:
 
     def __init__(self):
-        self.vertexList = {}
-        self.numVertices = 0
+        self.vertexList = {} # Dictionary that stores players (graph vertices) and their connections.
+        self.numVertices = 0 # Total number of vertices in the graph.
 
-    def add_vertex(self, key):
+    def add_vertex(self, key): # Adds a player (vertex) to the graph.
         self.numVertices = self.numVertices + 1
         newVertex = Player(key)
         self.vertexList[key] = newVertex
         return newVertex
 
-    def get_vertex(self, key):
+    def get_vertex(self, key): # Returns a player (vertex) of the graph, if it exists.
         if key in self.vertexList:
             return self.vertexList[key]
         else:
@@ -101,8 +104,8 @@ class Graph:
     def __contains__(self, key):
         return key in self.vertexList
 
-    def add_edge(self, f, t, cost=0):
-        # if f and t both are not in the graph, add these two nodes
+    def add_edge(self, f, t, cost=0): # Adds a connection (edge) between two players in the graph.
+        # if f and t are not in the graph, add these two nodes
         if f not in self.vertexList:
             nv = self.add_vertex(f)
 
@@ -111,7 +114,7 @@ class Graph:
 
         self.vertexList[f].add_neighbor(self.vertexList[t], cost)
 
-    def get_vertices(self):  # get all vertex
+    def get_vertices(self):  # Returns a list of all players (vertices) in the graph.
         return self.vertexList.keys()
 
     def __iter__(self):
