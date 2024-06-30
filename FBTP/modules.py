@@ -9,6 +9,17 @@ def cal_similarity(network_name, player_attributes):
     """
     :params player_attributes --> dict()
         player id : [team, nationality]
+	
+- Calculates the similarity matrix between players (similarity).
+Receive:
+--> network_name: Network name (Back or Forward) for display purposes.
+--> player_attributes: Dictionary with the attributes of each player (team and nationality).
+- For each pair of players, calculate the Jaccard similarity
+    (jaccard(attr_i, attr_j)), which measures the proportion of attributes in common between two players.
+- Fills the similarity matrix with the calculated similarities
+    (symmetric, since sim(i, j) = sim(j, i)).
+- Calculates and displays the density of the adjacency matrix, which indicates
+    the proportion of existing connections in relation to the total possible.
     """
 
     no = len(player_attributes)
@@ -36,6 +47,11 @@ def cal_similarity(network_name, player_attributes):
 
 
 def jaccard(array_1, array_2):
+"""
+- Auxiliary function that calculates the Jaccard similarity between two attribute arrays.
+- Finds the intersection and union of arrays.
+- Returns the ratio between the intersection size and the union size.
+"""
     inter = [val for val in array_1 if val in array_2] 
     union = list(set(array_1).union(set(array_2)))
     ja = len(inter) / len(union)
@@ -43,6 +59,15 @@ def jaccard(array_1, array_2):
 
 
 def cal_ability_avg(player_abilities_name):
+"""
+- Calculates the average of each player's abilities (ability_avg) for each ability present in player_abilities_name.
+Receive:
+--> player_abilities_name: Dictionary with each player's abilities.
+
+- For each skill:
+--> Adds up the skill values for all players.
+--> Divide the sum by the number of players to obtain the average.
+"""
 
     ability_avg = {}
 
